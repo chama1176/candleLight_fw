@@ -287,6 +287,7 @@ set(TGTG0B1_LIST
 	"budgetcan"
 	"candleLightFD"
 	"nucleo_g0b1re"
+	"WeActStudio_USB2CANFDV1"
 )
 
 foreach (TGTNAME IN LISTS TGTF042_LIST)
