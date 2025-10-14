@@ -54,7 +54,7 @@ THE SOFTWARE.
 #define LEDREADY_GPIO_Port	  GPIOA
 #define LEDREADY_Pin		  GPIO_PIN_2
 #define LEDREADY_Mode		  GPIO_MODE_OUTPUT_PP
-#define LEDREADY_Active_High 1
+#define LEDREADY_Active_High 0
 
 static void candlelightfd_setup(USBD_GS_CAN_HandleTypeDef *hcan)
 {
@@ -134,6 +134,11 @@ const struct BoardConfig config = {
 				.port = LEDTX_GPIO_Port,
 				.pin = LEDTX_Pin,
 				.active_high = LEDTX_Active_High,
+			},
+			[LED_READY] = {
+				.port = LEDREADY_GPIO_Port,
+				.pin = LEDREADY_Pin,
+				.active_high = LEDREADY_Active_High,
 			},
 		},
 	},
