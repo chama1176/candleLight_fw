@@ -43,6 +43,7 @@ typedef enum {
 typedef enum {
 	LED_RX = 0, //will also index into array led_state[]
 	LED_TX,
+	LED_READY,
 	LED_MAX
 } led_num_t;
 
