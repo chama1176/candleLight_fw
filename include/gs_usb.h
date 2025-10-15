@@ -301,8 +301,8 @@ struct gs_host_frame {
 	u32 echo_id;
 	u32 can_id;
 
-	u8 can_dlc;
-	u8 channel;
+	u8 can_dlc; // data length code
+	u8 channel; // 
 	u8 flags;
 	u8 reserved;
 

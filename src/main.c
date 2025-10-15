@@ -115,16 +115,6 @@ int main(void)
 #endif
 
 	while (1) {
-#if defined(BOARD_WeActStudio_USB2CANFDV1)
-		const struct BoardChannelConfig *channel_config0 = &config.channels[0];
-		const struct LEDConfig *led_config0 = channel_config0->leds;
-		// SWDIO PA13(internal pull-up default)
-		if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_13) == GPIO_PIN_RESET) {
-			HAL_GPIO_WritePin(led_config0[LED_READY].port, led_config0[LED_READY].pin, GPIO_PIN_RESET);
-		} else {
-			HAL_GPIO_WritePin(led_config0[LED_READY].port, led_config0[LED_READY].pin, GPIO_PIN_SET);
-		}
-#endif
 		for (unsigned int i = 0; i < ARRAY_SIZE(hGS_CAN.channels); i++) {
 			can_data_t *channel = &hGS_CAN.channels[i];
 
@@ -146,6 +136,60 @@ int main(void)
 		if (USBD_GS_CAN_DfuDetachRequested(&hUSB)) {
 			dfu_run_bootloader();
 		}
+
+#if defined(BOARD_WeActStudio_USB2CANFDV1)
+		const struct BoardChannelConfig *channel_config0 = &config.channels[0];
+		const struct LEDConfig *led_config0 = channel_config0->leds;
+		// SWDIO PA13(internal pull-up default)
+		if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_13) == GPIO_PIN_RESET) {
+			HAL_GPIO_WritePin(led_config0[LED_READY].port, led_config0[LED_READY].pin, GPIO_PIN_RESET);
+		} else {
+			// while (1)
+			// {
+				HAL_GPIO_WritePin(led_config0[LED_READY].port, led_config0[LED_READY].pin, GPIO_PIN_SET);
+				can_data_t *channel = &hGS_CAN.channels[0];
+				// struct gs_host_frame frame = {0};
+				// frame.can_id = 0x1;
+				// frame.can_dlc = 8;
+				// frame.classic_can->data[0] = 0x00;
+				struct gs_host_frame_object *frame_object;
+				bool was_irq_enabled = disable_irq();
+				// frame_object = list_first_entry_or_null(&hGS_CAN.list_frame_pool,
+				// 							struct gs_host_frame_object,
+				// 							list);
+				// if (!frame_object) {
+				// 	restore_irq(was_irq_enabled);
+				// 	for (uint8_t j = 0; j < 10; j++) {
+				// 		HAL_GPIO_TogglePin(led_config0[LED_READY].port, led_config0[LED_READY].pin);
+				// 		HAL_Delay(100);
+				// 	}
+				// 	continue;
+				// }
+				frame_object = &hGS_CAN.msgbuf[0];
+				list_del(&frame_object->list);
+				restore_irq(was_irq_enabled);
+
+				struct gs_host_frame *frame = &frame_object->frame;
+				for (uint8_t j = 12; j > 0; j--) {
+					frame->can_id = j;
+					frame->can_dlc = 8;
+					frame->classic_can->data[0] = 0x7F;
+					// frame->classic_can->data[0] = j;
+					frame->classic_can->data[1] = 0xFF;
+					frame->classic_can->data[2] = 0x7F;
+					frame->classic_can->data[3] = 0xF0;
+					frame->classic_can->data[4] = 0xF5;
+					frame->classic_can->data[5] = 0xFF;
+					frame->classic_can->data[6] = 0xF7;
+					frame->classic_can->data[7] = 0xFF;
+					can_send(channel, frame);
+					HAL_Delay(1);
+				}
+				HAL_Delay(10);
+			// }
+		}
+#endif
+
 	}
 }
 
