@@ -178,7 +178,7 @@ int main(void)
 					frame->classic_can->data[1] = 0xFF;
 					frame->classic_can->data[2] = 0x7F;
 					frame->classic_can->data[3] = 0xF0;
-					frame->classic_can->data[4] = 0xF5;
+					frame->classic_can->data[4] = 0x00;
 					frame->classic_can->data[5] = 0xFF;
 					frame->classic_can->data[6] = 0xF7;
 					frame->classic_can->data[7] = 0xFF;
