@@ -164,7 +164,7 @@ int main(void)
 				frame->classic_can->data[5] = 0xFF;
 				frame->classic_can->data[6] = 0xF7;
 				frame->classic_can->data[7] = 0xFF;
-				can_send(channel, frame);
+				// can_send(channel, frame);
 				HAL_Delay(1);
 			}
 			HAL_Delay(10);
