@@ -145,7 +145,7 @@ int main(void)
 			HAL_GPIO_WritePin(led_config0[LED_READY].port, led_config0[LED_READY].pin, GPIO_PIN_RESET);
 		} else {
 			HAL_GPIO_WritePin(led_config0[LED_READY].port, led_config0[LED_READY].pin, GPIO_PIN_SET);
-			can_data_t *channel = &hGS_CAN.channels[0];
+			// can_data_t *channel = &hGS_CAN.channels[0];
 			struct gs_host_frame_object *frame_object;
 			bool was_irq_enabled = disable_irq();
 			frame_object = &hGS_CAN.msgbuf[0];
