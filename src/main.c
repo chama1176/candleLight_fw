@@ -107,6 +107,13 @@ int main(void)
 	USBD_GS_CAN_Init(&hGS_CAN, &hUSB);
 	USBD_Start(&hUSB);
 
+#if defined(BOARD_WeActStudio_USB2CANFDV1)
+	const struct BoardChannelConfig *channel_config0 = &config.channels[0];
+	const struct LEDConfig *led_config0 = channel_config0->leds;
+	// reset READY LED to ON state
+	HAL_GPIO_WritePin(led_config0[LED_READY].port, led_config0[LED_READY].pin, GPIO_PIN_SET);
+#endif
+
 	while (1) {
 		for (unsigned int i = 0; i < ARRAY_SIZE(hGS_CAN.channels); i++) {
 			can_data_t *channel = &hGS_CAN.channels[i];
